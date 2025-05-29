@@ -32,11 +32,37 @@ export function OrderForm() {
     setFormData((prev) => ({ ...prev, address }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Handle form submission - in a real app, this would send the data to a server
-    console.log("Order submitted:", formData)
-    alert("Thank you for your order! We'll contact you shortly via WhatsApp or SMS to confirm.")
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+
+  const payload = {
+    name: formData.name,
+    phone: formData.phone,
+    address: formData.address,
+    mangoType: formData.variety.charAt(0).toUpperCase() + formData.variety.slice(1),
+    quantity: parseInt(formData.quantity),
+  }
+
+  try {
+    const res = await fetch('/api/order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+
+    const result = await res.json()
+
+    if (result.success) {
+      alert("✅ Order submitted successfully! We'll confirm via WhatsApp shortly.")
+      setFormData({ name: '', phone: '', address: '', variety: '', quantity: '' })
+    } else {
+      alert('❌ Submission failed. Please try again or contact support.')
+      console.error(result.error)
+    }
+  } catch (err) {
+    alert('❌ Network error. Please try again.')
+    console.error(err)
+  }
   }
 
   return (
