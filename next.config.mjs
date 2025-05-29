@@ -9,9 +9,6 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  experimental: {
-    appDir: true, // <- Enables App Router
-  },
 }
 
 export default nextConfig
