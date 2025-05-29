@@ -38,7 +38,7 @@ export async function POST(req: Request) {
         "Quantity": parseInt(body.quantity),
         "Order Status": "Pending",
         "Payment Status": "Unconfirmed",
-        "Total Amount": calculateAmount(body.mangoType, body.quantity).toFixed(2)
+        "Total Amount": calculateAmount(body.mangoType, body.quantity)
       }
     };
 
