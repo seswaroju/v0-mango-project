@@ -1,18 +1,17 @@
-// app/api/order/route.ts
 import { NextResponse } from "next/server"
 
-const AIRTABLE_API_KEY = process.env.AIRTABLE_API_KEY!
-const BASE_ID = process.env.AIRTABLE_BASE_ID!
-const TABLE_NAME = "Mango Orders"
+const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN as string
+const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID as string
+const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_TABLE_NAME || "Mango Orders"
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
 
-    const response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
+    const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+        Authorization: `Bearer ${AIRTABLE_TOKEN}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
