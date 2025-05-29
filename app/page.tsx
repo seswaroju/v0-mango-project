@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { MobileMenu } from "@/components/mobile-menu"
 import { ProductCard } from "@/components/product-card"
@@ -15,6 +16,10 @@ import { WhatsAppChat } from "@/components/whatsapp-chat"
 import { MobileCTA } from "@/components/mobile-cta"
 
 export default function Home() {
+  const [heroImageError, setHeroImageError] = useState(false)
+  const [logoImageError, setLogoImageError] = useState(false)
+  const [aboutImageError, setAboutImageError] = useState(false)
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Header */}
@@ -43,13 +48,18 @@ export default function Home() {
         {/* Hero Section */}
         <section className="relative">
           <div className="absolute inset-0 z-0">
-            <Image
-              src="/images/hero-bg.jpg"
-              alt="Mango background"
-              fill
-              className="object-cover brightness-[0.8]"
-              priority
-            />
+            {!heroImageError ? (
+              <Image
+                src="/images/hero-bg.jpg"
+                alt="Mango background"
+                fill
+                className="object-cover brightness-[0.8]"
+                priority
+                onError={() => setHeroImageError(true)}
+              />
+            ) : (
+              <div className="h-full w-full bg-gradient-to-r from-mango-600 to-mango-800"></div>
+            )}
           </div>
           <div className="container relative z-10 flex flex-col items-center justify-center py-28 text-center text-white md:py-36">
             <div className="mb-6 inline-block rounded-full bg-mango-500/20 px-4 py-1.5 text-sm font-medium text-mango-100">
@@ -137,7 +147,20 @@ export default function Home() {
           <div className="container">
             <div className="mx-auto max-w-3xl text-center">
               <div className="mb-6 flex justify-center">
-                <Image src="/images/logo.png" alt="Royal Mangoes Logo" width={80} height={80} className="h-20 w-20" />
+                {!logoImageError ? (
+                  <Image
+                    src="/images/logo.png"
+                    alt="Royal Mangoes Logo"
+                    width={80}
+                    height={80}
+                    className="h-20 w-20"
+                    onError={() => setLogoImageError(true)}
+                  />
+                ) : (
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white">
+                    <span className="text-lg font-bold text-mango-600">RM</span>
+                  </div>
+                )}
               </div>
               <h2 className="font-heading mb-4 text-3xl font-bold md:text-4xl">
                 Miyaan, Kya Aapko Rasalu Pasand Nahi?
@@ -257,7 +280,19 @@ export default function Home() {
                 </div>
               </div>
               <div className="relative h-[400px] overflow-hidden rounded-lg">
-                <Image src="/images/hero-bg.jpg" alt="Mango orchard" fill className="object-cover" />
+                {!aboutImageError ? (
+                  <Image
+                    src="/images/hero-bg.jpg"
+                    alt="Mango orchard"
+                    fill
+                    className="object-cover"
+                    onError={() => setAboutImageError(true)}
+                  />
+                ) : (
+                  <div className="h-full w-full bg-mango-100 flex items-center justify-center">
+                    <p className="text-mango-800 text-lg font-medium">Our Mango Orchards in Shamshabad</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
