@@ -1,14 +1,17 @@
+// app/api/order/route.ts
+
 import { NextResponse } from "next/server"
 
 const AIRTABLE_TOKEN = process.env.AIRTABLE_TOKEN as string
-const AIRTABLE_BASE_ID = process.env.AIRTABLE_BASE_ID as string
-const AIRTABLE_TABLE_NAME = process.env.AIRTABLE_TABLE_NAME || "Mango Orders"
+const BASE_ID = process.env.AIRTABLE_BASE_ID as string
+const TABLE_NAME = process.env.AIRTABLE_TABLE_NAME as string
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
+    console.log("Received order data:", body)
 
-    const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(AIRTABLE_TABLE_NAME)}`, {
+    const response = await fetch(`https://api.airtable.com/v0/${BASE_ID}/${encodeURIComponent(TABLE_NAME)}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${AIRTABLE_TOKEN}`,
@@ -32,13 +35,14 @@ export async function POST(req: Request) {
     const data = await response.json()
 
     if (!response.ok) {
-      console.error("Airtable error:", data)
+      console.error("❌ Airtable error:", data)
       return NextResponse.json({ success: false, error: data }, { status: 500 })
     }
 
+    console.log("✅ Order saved to Airtable:", data)
     return NextResponse.json({ success: true, id: data.id })
   } catch (error) {
-    console.error("Internal error:", error)
+    console.error("❌ Internal server error:", error)
     return NextResponse.json({ success: false, error }, { status: 500 })
   }
 }
